@@ -1,0 +1,464 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <title> up主详细</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.1.1/dist/echarts.min.js"></script>
+    <script src="{{ url_for('static',filename='js/customed.js') }}"></script>
+    <style type="text/css">
+        li>a{
+           color:#819198;
+            padding-top: 3px;
+            padding-right:10px ;
+        }
+        li>a:hover{
+            color: #ff7a98;
+        }
+        li>a.active{
+            color: hotpink;
+        }
+        #update-time{
+            border:solid #F4F4F4 1px;
+        }
+        #update-time>p{
+            padding-top:5px;
+            color: #A8A8AA;
+        }
+        #update-time>ul>li{
+            border:solid #F4F4F4 1px;
+        }
+         #update-time>ul>li:hover,
+          #update-time>ul>li:focus{
+             color: hotpink;
+         }
+         #update-time>ul>li>a.active{
+             color: hotpink;
+         }
+        #list-hd{
+            border:solid #F4F4F4 1px;
+        }
+        #video-messege,#video-title{
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        #myTab>li>a{
+            color: #A8A8AA;
+        }
+        #myTab>li>a:hover{
+            color: hotpink;
+        }
+        #myTab>li>a:focus{
+            color: hotpink;
+        }
+        #myTab>li>a.active{
+            color: hotpink;
+        }
+    </style>
+{% endblock %}
+
+
+
+{% block body %}
+<nav class="col-md-12 navbar navbar-default navbar-top" role="navigation">
+    <div class="navbar-header">
+         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="{{url_for('up_rank.up_rank')}}">IKkssS的数据平台</a>
+    </div>
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+            <li class=''>
+                 <a href="{{url_for('up_rank.up_rank')}}">Bilibili</a>
+            </li>
+            <li>
+                 <a href="markdownNote">微博</a>
+            </li>
+            <li class="dropdown">
+                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">抖音<strong class="caret"></strong></a>
+                <ul class="dropdown-menu">
+
+                </ul>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <form class="navbar-form navbar-left" role="search">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Search">
+                </div>
+                <button type="submit" class="btn btn-default">搜索</button>
+            </form>
+            {% if user_data %}
+            <li>
+                <img class="col-md-2 img-circle" style="width: 72px;height: 48px;padding-top:1px" src="{{ url_for('static',filename='image/logo.jpg') }}">
+                <a href="{{ url_for('up_rank.personal')}}" class="col-md-2" style="color: #ff3361">{{user_data.username}}</a>
+            </li>
+            {% else %}
+            <li><a href="admin"><span class="glyphicon glyphicon-user"></span> Admin</a></li>
+            {% endif %}
+        </ul>
+
+    </div>
+</nav>
+<div class="col-md-12">
+    <div class="col-md-4" style="border: solid 1px;color:#E4E7ED">
+        <div class="col-md-12" style="padding-top:10px;padding-bottom: 2px;border-bottom: solid 1px;color:#E4E7ED">
+            <img class="col-md-4 img-circle" style="width: 70px;height: 62px;padding:0px" src="{{detail_data.up_face}}">
+                <a class = "col-md-8 img-circle text-left" style="height: 72px;padding:18px;color: #A8A8AA;">ID:<span style="color:#333">{{ detail_data.up_name }}</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house-door-fill" style="color: hotpink;padding-top: 2px" viewBox="0 0 16 16">
+                    <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5z"/>
+                </svg>
+                </a>
+            <p class="col-md-6 text-left" style="padding-top: 1px;color:#A8A8AA;"><small>分类:</small> &nbsp;&nbsp;&nbsp;<span style="color:#333"><small>{{ detail_data.classic }}</small></span></p>
+            <p class="col-md-6 text-left" style="padding-top: 1px;color:#A8A8AA;"><small>性别: </small>&nbsp;&nbsp;&nbsp;<span style="color:#333"><small>{{ detail_data.sex }}</small></span></p>
+            <p class="col-md-6 text-left" style="padding-top: 1px;color:#A8A8AA;"><small>等级: </small>&nbsp;&nbsp;&nbsp;<span class="rounded" style="border:solid hotpink 4px;border-radius: 15px;background:hotpink;color:white"><small>{{ detail_data.lv }}</small></span></p>
+            <p class="col-md-6 text-left" style="padding-top: 1px;color:#A8A8AA;"><small>性别: </small>&nbsp;&nbsp;&nbsp;<span class="rounded" style="border:solid hotpink 4px;border-radius: 15px;background:hotpink;color:white"><small>{{ detail_data.member }}</small></span></p>
+            {% if detail_data.intru %}
+                {% for key,value in detail_data.intru.items() %}
+            <p class="col-md-12 text-left" style="padding-top: 1px;color:#A8A8AA;">
+                {{ key }}
+                <span style="color:#333">
+                {{  value }}
+                </span>
+            </p>
+                {%  endfor %}
+            {% endif %}
+            {% if detail_data.tags %}
+                {% for tag in detail_data.tags %}
+                    <div  class="col-md-3" style="padding:2px">
+                        <p class="col-md-12 text-center" id="video-messege" style="padding: 3px;border:solid lightpink 1px;border-radius: 10px;background:#FFF1F5 ;color:hotpink;margin: 0" data-toggle="tooltip" data-placement="top"  title='{{ tag }}'>{{ tag }}</p>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="col-md-12 pre-scrollable" style="padding-top:10px;padding-bottom: 2px;border-bottom: solid 1px;color:#E4E7ED;overflow:scroll;height: 600px">
+            <p style="color:#333"><small>UP主数据分析：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</small><span style="color: #A8A8AA"><small>更新时间：{{date_time}}</small></span></p>
+            {% if detail_data.sj_1 %}
+                {% for key,value in detail_data.sj_1.items() %}
+                    <div class="col-md-4" style="padding: 0">
+                        <p class="col-md-12 text-center" style="padding:0;color: #A8A8AA"><small>{{key}}</small></p>
+                        <p class="col-md-12 text-center" style="color:#333;border-bottom: solid 1px #E4E7ED;padding-bottom: 10px"><strong>{{value}}</strong></p>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <p class="col-md-12" style="padding: 0;color:#333 ">视频人气数据表现
+                <svg  xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16" style="color: hotpink;padding-top: 4px">
+                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                </svg>
+            </p>
+            {% if detail_data.sj_2 %}
+                {% for key,value in detail_data.sj_2.items() %}
+                    <div class="col-md-4" style="padding: 0">
+                        <p class="col-md-12 text-center" style="padding:0;color: #A8A8AA"><small>{{key}}</small></p>
+                        <p class="col-md-12 text-center" style="color:#333;border-bottom: solid 1px #E4E7ED;padding-bottom: 10px"><strong>{{value}}</strong></p>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-md-8" >
+        <div class="col-md-12" style="border: solid 1px;color:#E4E7ED;height: 782px">
+            <ul class="nav nav-tabs" style="padding-top: 10px;">
+                      <li class="active" ><a style="padding-bottom:5px; padding-left: 30px;padding-right: 30px;color: hotpink;">核心一览</a></li>
+            </ul><br>
+            <div class="col-md-12" style="padding-top:10px;padding-bottom: 2px;border-bottom: solid 1px;color:#E4E7ED">
+                {% for key,value in detail_data.sj_5.items() %}
+                    <div class="col-md-3" style="padding-left: 10px;padding-right: 10px">
+                        <p class="col-md-12 text-center" style="color: #333">{{key}}</p>
+
+                        <p class="col-md-12 text-center" style="color: #333">
+                            {% if value["tag"] == "-1" %}
+                            <span class="col-md-12" style="color: greenyellow"><small>{{value["rate"]}}</small><svg xmlns="http://www.w3.org/2000/svg" style="color: greenyellow;padding-top: 4px" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                                  <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                                </svg></span>
+
+                            {% elif value["tag"] == "1" %}
+                            <span class="col-md-12" style="color: red"><small>{{value["rate"]}}</small><svg xmlns="http://www.w3.org/2000/svg" style="color: red;padding-top: 4px" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+                                  <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+                                </svg></span>
+
+                            {% endif %}
+                            {{value["now"]}}
+                        </p>
+                        <p class="col-md-12 text-center" style="color: #A8A8AA">{{value["before"]}}</p>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="col-md-12 pre-scrollable" style="height: 300px;padding-top:30px;padding-bottom: 10px;overflow:scroll;">
+                <div class="col-md-12" id="fansDataNew" style="height: 300px">
+                    <script type="text/javascript">
+                       var myChart = echarts.init(document.getElementById('fansDataNew'), 'customed');
+                       var option = {
+                           title: {
+                                text: '粉丝变化趋势图'
+                            },
+                            tooltip: {},
+                            legend: {
+                                data:['粉丝增量']
+                            },
+                            xAxis: {
+                                data: {{detail_data.bloggerdate}}
+                            },
+                            yAxis: {},
+                            series: [{
+                                name: '粉丝增量',
+                                type: 'line',
+                                data: {{detail_data.bloggerfansIncData}}
+                            }]
+                       }
+                       myChart.setOption(option);
+                    </script>
+                </div>
+                <div class="container col-md-12" style="height: 300px">
+                    <ul id="myTab" class="nav nav-tabs">
+                        <li class="active"><a href="#tab1" data-toggle="tab">点赞</a></li>
+                        <li><a href="#tab2" data-toggle="tab">收藏</a></li>
+                        <li><a href="#tab3" data-toggle="tab">投币</a></li>
+                    </ul>
+
+                    <div id="myTabContent" class="tab-content col-md-12">
+                        <div class="tab-pane  active " id="tab1">
+                            <div id="tab1-container" class="myTable-container col-md-12" style="height: 300px"></div>
+                        </div>
+                        <div class="tab-pane " id="tab2">
+                            <div id="tab2-container" class="myTable-container col-md-12" style="height: 300px"></div>
+                        </div>
+                        <div class="tab-pane " id="tab3">
+                            <div id="tab3-container" class="myTable-container col-md-12" style="height: 300px"></div>
+                        </div>
+                        <script>
+		var $tab1 = document.getElementById('tab1-container');
+		var $tab2 = document.getElementById('tab2-container');
+		var $tab3 = document.getElementById('tab3-container');
+
+
+        var tab1Option = {
+                           title: {
+                                text: '点赞数量变化趋势图'
+                            },
+                            tooltip: {},
+                            legend: {
+                                data:['点赞数量']
+                            },
+                            xAxis: {
+                                data: {{detail_data.bloggerdate}}
+                            },
+                            yAxis: {},
+                            series: [{
+                                name: '点赞增量',
+                                type: 'line',
+                                data: {{detail_data.bloggerlikeIncData}}
+                            }]
+                       }
+
+
+
+        var tab2Option = {
+                           title: {
+                                text: '收藏数量变化趋势图'
+                            },
+                            tooltip: {},
+                            legend: {
+                                data:['收藏数量']
+                            },
+                            xAxis: {
+                                data: {{detail_data.bloggerdate}}
+                            },
+                            yAxis: {},
+                            series: [{
+                                name: '收藏增量',
+                                type: 'line',
+                                data: {{detail_data.bloggerfavoriteIncData}}
+                            }]
+                       }
+
+
+        var tab3Option = {
+                           title: {
+                                text: '投币数量变化趋势图'
+                            },
+                            tooltip: {},
+                            legend: {
+                                data:['投币数量']
+                            },
+                            xAxis: {
+                                data: {{detail_data.bloggerdate}}
+                            },
+                            yAxis: {},
+                            series: [{
+                                name: '粉丝增量',
+                                type: 'line',
+                                data: {{detail_data.bloggercoinIncData}}
+                            }]
+                       }
+
+        /* 初始化tab1的 */
+        var tab1Table = echarts.init($tab1, 'customed');
+        tab1Table.setOption(tab1Option);
+
+        /* shown.bs.tab为tab选项卡高亮 */
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+             /* 获取已激活的标签页的名称 */
+            /* hash 属性是一个可读可写的字符串，该字符串是 URL 从 # 号开始的部分 */
+            var activeTab = $(e.target)[0].hash;
+            /* 当相应的标签被点击时，进行对应的图表渲染 */
+            if (activeTab == "#tab2") {
+                /* 释放图表实例，使实例不可用,不加上这个，会报错： */
+                /* there is a chart instance     already initialized on the dom */
+                echarts.dispose($tab2);
+                var tab2Table = echarts.init($tab2,'customed');
+                tab2Table.setOption(tab2Option);
+            } else if (activeTab == "#tab3") {
+                echarts.dispose($tab3);
+                var tab3Table = echarts.init($tab3,'customed');
+                tab3Table.setOption(tab3Option);
+            }
+        });
+    </script>
+
+                    </div>
+                </div>
+                <div class="container col-md-12" style="height: 300px">
+                    <ul id="myTab2" class="nav nav-tabs">
+                        <li class="active"><a href="#tab4" data-toggle="tab">播放</a></li>
+                        <li><a href="#tab5" data-toggle="tab">评论</a></li>
+                        <li><a href="#tab6" data-toggle="tab">弹幕</a></li>
+                        <li><a href="#tab7" data-toggle="tab">分享</a></li>
+                    </ul>
+
+                    <div id="myTabContent2" class="tab-content col-md-12">
+                        <div class="tab-pane  active " id="tab4">
+                            <div id="tab4-container" class="myTable-container col-md-12" style="height: 300px"></div>
+                        </div>
+                        <div class="tab-pane " id="tab5">
+                            <div id="tab5-container" class="myTable-container col-md-12" style="height: 300px"></div>
+                        </div>
+                        <div class="tab-pane " id="tab6">
+                            <div id="tab6-container" class="myTable-container col-md-12" style="height: 300px"></div>
+                        </div>
+                        <div class="tab-pane " id="tab7">
+                            <div id="tab7-container" class="myTable-container col-md-12" style="height: 300px"></div>
+                        </div>
+                        <script>
+		var $tab4 = document.getElementById('tab4-container');
+		var $tab5 = document.getElementById('tab5-container');
+		var $tab6 = document.getElementById('tab6-container');
+		var $tab7 = document.getElementById('tab7-container');
+
+
+        var tab4Option = {
+                           title: {
+                                text: '播放量变化趋势图'
+                            },
+                            tooltip: {},
+                            legend: {
+                                data:['播放量']
+                            },
+                            xAxis: {
+                                data: {{detail_data.bloggerdate}}
+                            },
+                            yAxis: {},
+                            series: [{
+                                name: '播放增量',
+                                type: 'line',
+                                data: {{detail_data.bloggerplayIncData}}
+                            }]
+                       }
+
+
+
+        var tab5Option = {
+                           title: {
+                                text: '评论数量变化趋势图'
+                            },
+                            tooltip: {},
+                            legend: {
+                                data:['评论数量']
+                            },
+                            xAxis: {
+                                data: {{detail_data.bloggerreplyIncData}}
+                            },
+                            yAxis: {},
+                            series: [{
+                                name: '评论增量',
+                                type: 'line',
+                                data: {{detail_data.bloggerfavoriteIncData}}
+                            }]
+                       }
+
+
+        var tab6Option = {
+                           title: {
+                                text: '弹幕数量变化趋势图'
+                            },
+                            tooltip: {},
+                            legend: {
+                                data:['弹幕数量']
+                            },
+                            xAxis: {
+                                data: {{detail_data.bloggerdate}}
+                            },
+                            yAxis: {},
+                            series: [{
+                                name: '弹幕增量',
+                                type: 'line',
+                                data: {{detail_data.bloggerdanmuIncData}}
+                            }]
+                       }
+        var tab7Option = {
+                           title: {
+                                text: '分享数量变化趋势图'
+                            },
+                            tooltip: {},
+                            legend: {
+                                data:['分享数量']
+                            },
+                            xAxis: {
+                                data: {{detail_data.bloggerdate}}
+                            },
+                            yAxis: {},
+                            series: [{
+                                name: '弹幕增量',
+                                type: 'line',
+                                data: {{detail_data.bloggershareIncData}}
+                            }]
+                       }
+
+        /* 初始化tab1的 */
+        var tab4Table = echarts.init($tab4, 'customed');
+        tab4Table.setOption(tab4Option);
+
+        /* shown.bs.tab为tab选项卡高亮 */
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+             /* 获取已激活的标签页的名称 */
+            /* hash 属性是一个可读可写的字符串，该字符串是 URL 从 # 号开始的部分 */
+            var activeTab = $(e.target)[0].hash;
+            /* 当相应的标签被点击时，进行对应的图表渲染 */
+            if (activeTab == "#tab5") {
+                /* 释放图表实例，使实例不可用,不加上这个，会报错： */
+                /* there is a chart instance     already initialized on the dom */
+                echarts.dispose($tab5);
+                var tab5Table = echarts.init($tab5,'customed');
+                tab5Table.setOption(tab5Option);
+            } else if (activeTab == "#tab6") {
+                echarts.dispose($tab6);
+                var tab6Table = echarts.init($tab6,'customed');
+                tab6Table.setOption(tab6Option);
+            }else if (activeTab == "#tab7") {
+                echarts.dispose($tab7);
+                var tab7Table = echarts.init($tab7,'customed');
+                tab7Table.setOption(tab7Option);
+            }
+        });
+    </script>
+
+                    </div>
+                </div>
+            </div><br>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    })
+    $('div').scrollspy({ target: '.navbar-example' })
+</script>
+{% endblock %}

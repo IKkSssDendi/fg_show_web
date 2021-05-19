@@ -1,0 +1,435 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <title> B站榜单 - B站部分行业榜单</title>
+    <style type="text/css">
+        li>a{
+           color:#819198;
+            padding-top: 3px;
+            padding-right:10px ;
+        }
+        li>a:hover{
+            color: #ff7a98;
+        }
+        .nav-tabs>li.active>a{
+            color: #ff7a98;
+        }
+        body > div > div > div > div:nth-child(3) > p.col-md-12.text-right > a:hover{
+            color: #ff7a98;
+        }
+
+    </style>
+{% endblock %}
+
+
+
+{% block body %}
+
+    <nav class="col-md-12 navbar navbar-default navbar-top" role="navigation">
+				<div class="navbar-header">
+					 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="{{url_for('up_rank.up_rank')}}">IKkssS的数据平台</a>
+				</div>
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li class=''>
+							 <a href="{{url_for('up_rank.up_rank')}}">Bilibili</a>
+						</li>
+						<li>
+							 <a href="markdownNote">微博</a>
+						</li>
+						<li class="dropdown">
+							 <a href="#" class="dropdown-toggle" data-toggle="dropdown">抖音<strong class="caret"></strong></a>
+							<ul class="dropdown-menu">
+
+							</ul>
+						</li>
+					</ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <form class="navbar-form navbar-left" role="search">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Search">
+                            </div>
+                            <button type="submit" class="btn btn-default">搜索</button>
+                        </form>
+                        {% if user_data %}
+                        <li>
+                            <img class="col-md-2 img-circle" style="width: 72px;height: 48px;padding-top:1px" src="{{ url_for('static',filename='image/logo.jpg') }}">
+                            <a class="col-md-2" href="{{ url_for('up_rank.personal')}}" style="color: #ff3361">{{user_data.username}}</a>
+                        </li>
+                        {% else %}
+                        <li>
+                            <a href="admin"><span class="glyphicon glyphicon-user"></span> Admin</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+
+				</div>
+			</nav>
+{% if view_type == '1' %}
+           <div class="col-md-12">
+               <ul class="nav nav-tabs">
+                  <li class="active" ><a href="{{url_for('up_rank.personal')}}" style="padding-left: 30px;padding-right: 30px;color: hotpink;">个人中心</a></li>
+                  <li><a href="?view_type=3" style="padding-left: 30px;padding-right: 30px">通知管理</a></li>
+                  <li><a href="?view_type=4" style="padding-left: 30px;padding-right: 30px">管理中心</a></li>
+                </ul>
+               <div class="col-md-12" style="padding-bottom: 2px;border-bottom: solid 1px;color:#E4E7ED">
+                   <p class="col-md-12 text-left" style="padding-top: 20px;color:#819198;">个人信息</p>
+                   <div class="col-md-12" style="padding-left: 5px">
+                   <img class="col-md-4 img-circle" style="width: 70px;height: 62px;padding:0px" src="{{ url_for('static',filename='image/logo.jpg') }}">
+                   <p class = "col-md-4 img-circle text-left" style="height: 72px;padding:18px;color: #A8A8AA;">ID:<span style="color:#333">{{ user_data.id }}</span></p>
+                       <p class = "col-md-4 img-circle text-left" style="height: 72px;padding:18px;color: #A8A8AA;">注册时间:<span style="color:#333">{{ user_data.sign_time }}</span></p>
+                   </div>
+               </div>
+
+               <div class="col-md-12" style="padding-bottom: 2px;border-bottom: solid 1px;color:#E4E7ED">
+                   <p class="col-md-4 text-left" style="padding-top: 15px;color:#819198;">登录账号</p>
+                   <p class="col-md-12 text-left" style="padding-top: 15px;color:#A8A8AA;">用户名: &nbsp;&nbsp;&nbsp;<span style="color:#333">{{ user_data.username }}</span></p>
+                   <p class="col-md-12 text-left" style="padding-top: 15px;color:#A8A8AA;">性别: &nbsp;&nbsp;&nbsp;<span style="color:#333">
+                       {%  if user_data.sex == '1' %}
+                       男
+                       {% elif user_data.sex == '0' %}
+                       女
+                       {% else %}
+                       未知的存在
+                       {% endif %}
+                   </span></p>
+                   <p class="col-md-12 text-left" style="padding-top: 15px;color:#A8A8AA;">E-mail: &nbsp;&nbsp;&nbsp;<span style="color:#333">{{ user_data.email }}</span></p>
+                   <p class="col-md-12 text-left" style="padding-top: 15px;color:#A8A8AA;">手机号码: &nbsp;&nbsp;&nbsp;<span style="color:#333">{{ user_data.phone }}</span></p>
+                   <p class="col-md-12 text-left" style="padding-top: 15px;color:#A8A8AA;">个人简介: &nbsp;&nbsp;&nbsp;<span style="color:#333">
+                       {% if user_data.intru %}
+                       user_data_intru
+                       {% else %}
+                       这个人超级懒，什么都没有留下！！！！！
+                       {% endif %}
+                   </span></p>
+                   <p class="col-md-12 text-right"><a class="btn" href="?view_type=2">更改个人信息</a></p>
+               </div>
+
+           </div>
+{% elif view_type == "2"%}
+    <!--
+    更改个人信息界面
+    -->
+<div class="col-md-12">
+    <ul class="nav nav-tabs">
+      <li class="active" ><a href="{{url_for('up_rank.personal')}}" style="padding-left: 30px;padding-right: 30px;color: hotpink;">个人中心</a></li>
+      <li><a href="?view_type=3" style="padding-left: 30px;padding-right: 30px">通知管理</a></li>
+      <li><a href="?view_type=4" style="padding-left: 30px;padding-right: 30px">管理中心</a></li>
+    </ul>
+    <div class="col-md-12" style="padding-bottom: 2px;border-bottom: solid 1px;color:#E4E7ED">
+       <p class="col-md-12 text-left" style="padding-top: 20px;color:#819198;">个人信息</p>
+       <div class="col-md-12" style="padding-left: 5px">
+            <img class="col-md-4 img-circle" style="width: 70px;height: 62px;padding:0px" src="{{ url_for('static',filename='image/logo.jpg') }}">
+            <p class = "col-md-4 img-circle text-left" style="height: 72px;padding:18px;color: #A8A8AA;">ID:<span style="color:#333">{{ user_data.id }}</span></p>
+           <p class="col-md-2 text-center" style="padding-top: 15px;color:#A8A8AA;">用户名: &nbsp;&nbsp;&nbsp;<span style="color:#333">{{ user_data.username }}</span></p>
+           <p class = "col-md-2 img-circle text-left" style="height: 72px;padding:18px;color: #A8A8AA;">注册时间:<span style="color:#333">{{ user_data.sign_time }}</span></p>
+       </div>
+   </div>
+    <div class="col-md-12" style="padding-bottom: 2px;border-bottom: solid 1px;color:#E4E7ED"><br>
+        {{ form.csrf_token }}
+            {% with messages = get_flashed_messages() %}
+            <div>
+            {{ form.username.label(class="sr-only") }}
+            {{ form.username(class="form-control",value=user_data.username) }}
+            {% if messages and messages[0].username %}
+                    <div class="alert alert-danger alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert"
+                                aria-hidden="true">
+                            &times;
+                        </button>
+                         <small class="error">{{ messages and messages[0].username[0] }}</small><br>
+                    </div>
+            {% endif %}
+            <br>
+                </div>
+            <div>
+                {{ form.old_password.label(class="sr-only")}}
+                {{ form.old_password(class="form-control") }}
+                {% if messages and messages[0].old_password %}
+                    <div class="alert alert-danger alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert"
+                                aria-hidden="true">
+                            &times;
+                        </button>
+                         <small class="error">{{ messages and messages[0].password[0] }}</small><br>
+                    </div>
+            {% endif %}
+                <br>
+            {{ form.password.label(class="sr-only")}}
+            {{ form.password(class="form-control") }}
+            <br>
+            {{ form.cheack_password.label(class="sr-only")}}
+            {{ form.cheack_password(class="form-control") }}
+            {% if messages and messages[0].password %}
+                    <div class="alert alert-danger alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert"
+                                aria-hidden="true">
+                            &times;
+                        </button>
+                         <small class="error">{{ messages and messages[0].password[0] }}</small><br>
+                    </div>
+            {% endif %}
+            <br>
+                </div>
+            <div>
+            {{ form.email.label(class="sr-only")}}
+            {{ form.email(class="form-control",value=user_data.email) }}
+            {% if messages and messages[0].email %}
+                    <div class="alert alert-danger alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert"
+                                aria-hidden="true">
+                            &times;
+                        </button>
+                         <small class="error">{{ messages and messages[0].email[0] }}</small><br>
+                    </div>
+            {% endif %}
+            <br>
+                </div>
+            <div>
+            {{ form.phone.label(class="sr-only")}}
+            {{ form.phone(class="form-control",value=user_data.phone) }}
+              {% if messages and messages[0].phone %}
+                    <div class="alert alert-danger alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert"
+                                aria-hidden="true">
+                            &times;
+                        </button>
+                         <small class="error">{{ messages and messages[0].phone[0] }}</small><br>
+                    </div>
+            {% endif %}
+            <br>
+            </div>
+            <div>
+                {{ form.sex.label(class="sr-only")}}
+                {{ form.sex(class="form-control",value=user_data.sex) }}
+            </div><br>
+            <div>
+                <p class="text-left">上传头像文件:</p>
+            {{ form.user_face.label(class="sr-only")}}
+            {{ form.user_face(class="form-control") }}
+            {% if messages and messages[0].user_face %}
+                    <div class="alert alert-danger alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert"
+                                aria-hidden="true">
+                            &times;
+                        </button>
+                         <small class="error">{{ messages and messages[0].user_face[0] }}</small><br>
+                    </div>
+            {% endif %}
+                <br>
+                {{ form.intru.label(class="sr-only")}}
+                {{ form.intru(class="form-control",style="height: 200px",value=user_data.intru) }}
+                {% if messages and messages[0].intru %}
+                    <div class="alert alert-danger alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert"
+                                aria-hidden="true">
+                            &times;
+                        </button>
+                         <small class="error">{{ messages and messages[0].user_face[0] }}</small><br>
+                    </div>
+            {% endif %}
+            {% endwith %}
+    </div>
+</div>
+{% elif view_type == "3" %}
+    <div class="col-md-12">
+    <ul class="nav nav-tabs">
+      <li><a href="{{url_for('up_rank.personal')}}" style="padding-left: 30px;padding-right: 30px;">个人中心</a></li>
+      <li class="active"><a href="?view_type=3" style="padding-left: 30px;padding-right: 30px;color: hotpink;">通知管理</a></li>
+      <li><a href="?view_type=4" style="padding-left: 30px;padding-right: 30px">管理中心</a></li>
+    </ul>
+        <svg xmlns="http://www.w3.org/2000/svg" style="padding-top: 30px;padding-left: 400px" fill="currentColor" class="bi bi-journal-x col-md-8" viewBox="0 0 16 16">
+      <path fill-rule="evenodd" d="M6.146 6.146a.5.5 0 0 1 .708 0L8 7.293l1.146-1.147a.5.5 0 1 1 .708.708L8.707 8l1.147 1.146a.5.5 0 0 1-.708.708L8 8.707 6.854 9.854a.5.5 0 0 1-.708-.708L7.293 8 6.146 6.854a.5.5 0 0 1 0-.708z"/>
+      <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2z"/>
+      <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1z"/>
+    </svg>
+    </div>
+    <br>
+{% elif view_type == "4" %}
+    <div class="col-md-12">
+    <ul class="nav nav-tabs">
+      <li><a href="{{url_for('up_rank.personal')}}" style="padding-left: 30px;padding-right: 30px;">个人中心</a></li>
+      <li><a href="?view_type=3" style="padding-left: 30px;padding-right: 30px;">通知管理</a></li>
+      <li class="active"><a href="?view_type=4" style="padding-left: 30px;padding-right: 30px;color: hotpink;">管理中心</a></li>
+    </ul>
+        <div class="col-md-12" style="padding-bottom: 2px;color:#E4E7ED">
+       <p class="col-md-12 text-left" style="padding-top: 20px;color:#819198;">个人信息</p>
+       <div class="col-md-12" style="padding-left: 5px">
+            <img class="col-md-4 img-circle" style="width: 70px;height: 62px;padding:0px" src="{{ url_for('static',filename='image/logo.jpg') }}">
+            <p class = "col-md-4 img-circle text-left" style="height: 72px;padding:18px;color: #A8A8AA;">ID:<span style="color:#333">{{ user_data.id }}</span></p>
+           <p class="col-md-2 text-center" style="padding-top: 15px;color:#A8A8AA;">用户名: &nbsp;&nbsp;&nbsp;<span style="color:#333">{{ user_data.username }}</span></p>
+           <p class="col-md-2 text-center" style="padding-top: 15px;color:#A8A8AA;">身份: &nbsp;&nbsp;&nbsp;<span style="color:#333"><strong>管理员</strong></span></p>
+           <p class = "col-md-2 img-circle text-left" style="height: 72px;padding:18px;color: #A8A8AA;">注册时间:<span style="color:#333">{{ user_data.sign_time }}</span></p>
+       </div>
+   </div>
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="?view_type=4" style="padding-top:10px;padding-left: 30px;padding-right: 30px;color: hotpink;">用户列表</a></li>
+            <li><a href="?view_type=5" style="padding-left: 30px;padding-right: 30px;">黑名单</a></li>
+        </ul>
+        {%for user in users%}
+            <div class="col-md-12" style="padding-bottom: 2px;border-bottom: solid 1px;color:#E4E7ED"><br>
+                <img class="col-md-4 img-circle" style="width: 70px;height: 62px;padding:0px" src="static/image/{{user.user_face}}">
+                <p class = "col-md-4 img-circle text-left" style="height: 72px;padding:18px;color: #A8A8AA;">ID:<span style="color:#333">{{ user.uuid }}</span></p>
+                <p class="col-md-4 text-center" style="padding-top: 15px;color:#A8A8AA;">用户名: &nbsp;&nbsp;&nbsp;<span style="color:#333">{{ user.username }}</span></p>
+                <p class = "col-md-2 img-circle text-left" style="height: 72px;padding:18px;color: #A8A8AA;">注册时间:<span style="color:#333">{{ user.sign_time }}</span></p>
+                <a href="?id={{user.uuid}}&view_type=8" class="col-md-1 btn-xs btn-primary text-center">更改信息</a><br><br>
+                <a href="?id={{user.uuid}}&view_type=7" class="col-md-1 btn-xs btn-danger text-center">加入黑名单</a>
+            </div>
+        {%endfor%}
+    </div>
+{% elif view_type == '5' %}
+    <div class="col-md-12">
+    <ul class="nav nav-tabs">
+      <li><a href="{{url_for('up_rank.personal')}}" style="padding-left: 30px;padding-right: 30px;">个人中心</a></li>
+      <li><a href="?view_type=3" style="padding-left: 30px;padding-right: 30px;">通知管理</a></li>
+      <li class="active"><a href="?view_type=4" style="padding-left: 30px;padding-right: 30px;color: hotpink;">管理中心</a></li>
+    </ul>
+        <div class="col-md-12" style="padding-bottom: 2px;color:#E4E7ED">
+       <p class="col-md-12 text-left" style="padding-top: 20px;color:#819198;">个人信息</p>
+       <div class="col-md-12" style="padding-left: 5px">
+            <img class="col-md-4 img-circle" style="width: 70px;height: 62px;padding:0px" src="{{ url_for('static',filename='image/logo.jpg') }}">
+            <p class = "col-md-4 img-circle text-left" style="height: 72px;padding:18px;color: #A8A8AA;">ID:<span style="color:#333">{{ user_data.id }}</span></p>
+           <p class="col-md-2 text-center" style="padding-top: 15px;color:#A8A8AA;">用户名: &nbsp;&nbsp;&nbsp;<span style="color:#333">{{ user_data.username }}</span></p>
+           <p class="col-md-2 text-center" style="padding-top: 15px;color:#A8A8AA;">身份: &nbsp;&nbsp;&nbsp;<span style="color:#333"><strong>管理员</strong></span></p>
+           <p class = "col-md-2 img-circle text-left" style="height: 72px;padding:18px;color: #A8A8AA;">注册时间:<span style="color:#333">{{ user_data.sign_time }}</span></p>
+       </div>
+   </div>
+        <ul class="nav nav-tabs">
+            <li ><a href="?view_type=4" style="padding-top:10px;padding-left: 30px;padding-right: 30px;">用户列表</a></li>
+            <li class="active"><a href="?view_type=5" style="padding-left: 30px;padding-right: 30px;color: black;">黑名单</a></li>
+        </ul>
+        {%for user in users%}
+            <div class="col-md-12" style="padding-bottom: 2px;border-bottom: solid 1px;color:#E4E7ED"><br>
+                <img class="col-md-4 img-circle" style="width: 70px;height: 62px;padding:0px" src="static/image/{{user.user_face}}">
+                <p class = "col-md-4 img-circle text-left" style="height: 72px;padding:18px;color: #A8A8AA;">ID:<span style="color:#333">{{ user.uuid }}</span></p>
+                <p class="col-md-4 text-center" style="padding-top: 15px;color:#A8A8AA;">用户名: &nbsp;&nbsp;&nbsp;<span style="color:#333">{{ user.username }}</span></p>
+                <p class = "col-md-2 img-circle text-left" style="height: 72px;padding:18px;color: #A8A8AA;">注册时间:<span style="color:#333">{{ user.sign_time }}</span></p>
+                <a href="?id={{user.uuid}}&view_type=8" class="col-md-1 btn-xs btn-primary text-center">更改信息</a><br><br>
+                <a href="?id={{user.uuid}}&view_type=9" class="col-md-1 btn-xs btn-danger text-center">移出黑名单</a>
+            </div>
+        {%endfor%}
+    </div>
+    {%elif view_type == '8'%}
+   <div class="col-md-12">
+    <ul class="nav nav-tabs">
+      <li ><a href="{{url_for('up_rank.personal')}}" style="padding-left: 30px;padding-right: 30px;">个人中心</a></li>
+      <li><a href="?view_type=3" style="padding-left: 30px;padding-right: 30px">通知管理</a></li>
+      <li class="active"><a href="?view_type=4" style="padding-left: 30px;padding-right: 30px;color: hotpink;">管理中心</a></li>
+    </ul>
+    <div class="col-md-12" style="padding-bottom: 2px;border-bottom: solid 1px;color:#E4E7ED">
+       <p class="col-md-12 text-center" style="padding-top: 20px;color: hotpink;">管理员更改用户信息</p><br>
+       <div class="col-md-12" style="padding-left: 5px">
+            <img class="col-md-4 img-circle" style="width: 70px;height: 62px;padding:0px" src=/static/image/{{user_data.user_face}}>
+            <p class = "col-md-4 img-circle text-left" style="height: 72px;padding:18px;color: #A8A8AA;">ID:<span style="color:#333">{{ user_data.id }}</span></p>
+           <p class="col-md-2 text-center" style="padding-top: 15px;color:#A8A8AA;">用户名: &nbsp;&nbsp;&nbsp;<span style="color:#333">{{ user_data.username }}</span></p>
+           <p class = "col-md-2 img-circle text-left" style="height: 72px;padding:18px;color: #A8A8AA;">注册时间:<span style="color:#333">{{ user_data.sign_time }}</span></p>
+       </div>
+   </div>
+    <div class="col-md-12" style="padding-bottom: 2px;border-bottom: solid 1px;color:#E4E7ED"><br>
+        {{ form.csrf_token }}
+            {% with messages = get_flashed_messages() %}
+            <div>
+            {{ form.username.label(class="sr-only") }}
+            {{ form.username(class="form-control",value=user_data.username) }}
+            {% if messages and messages[0].username %}
+                    <div class="alert alert-danger alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert"
+                                aria-hidden="true">
+                            &times;
+                        </button>
+                         <small class="error">{{ messages and messages[0].username[0] }}</small><br>
+                    </div>
+            {% endif %}
+            <br>
+                </div>
+            <div>
+                {{ form.old_password.label(class="sr-only")}}
+                {{ form.old_password(class="form-control") }}
+                {% if messages and messages[0].old_password %}
+                    <div class="alert alert-danger alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert"
+                                aria-hidden="true">
+                            &times;
+                        </button>
+                         <small class="error">{{ messages and messages[0].password[0] }}</small><br>
+                    </div>
+            {% endif %}
+                <br>
+            {{ form.password.label(class="sr-only")}}
+            {{ form.password(class="form-control") }}
+            <br>
+            {{ form.cheack_password.label(class="sr-only")}}
+            {{ form.cheack_password(class="form-control") }}
+            {% if messages and messages[0].password %}
+                    <div class="alert alert-danger alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert"
+                                aria-hidden="true">
+                            &times;
+                        </button>
+                         <small class="error">{{ messages and messages[0].password[0] }}</small><br>
+                    </div>
+            {% endif %}
+            <br>
+                </div>
+            <div>
+            {{ form.email.label(class="sr-only")}}
+            {{ form.email(class="form-control",value=user_data.email) }}
+            {% if messages and messages[0].email %}
+                    <div class="alert alert-danger alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert"
+                                aria-hidden="true">
+                            &times;
+                        </button>
+                         <small class="error">{{ messages and messages[0].email[0] }}</small><br>
+                    </div>
+            {% endif %}
+            <br>
+                </div>
+            <div>
+            {{ form.phone.label(class="sr-only")}}
+            {{ form.phone(class="form-control",value=user_data.phone) }}
+              {% if messages and messages[0].phone %}
+                    <div class="alert alert-danger alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert"
+                                aria-hidden="true">
+                            &times;
+                        </button>
+                         <small class="error">{{ messages and messages[0].phone[0] }}</small><br>
+                    </div>
+            {% endif %}
+            <br>
+            </div>
+            <div>
+                {{ form.sex.label(class="sr-only")}}
+                {{ form.sex(class="form-control",value=user_data.sex) }}
+            </div><br>
+            <div>
+                <p class="text-left">上传头像文件:</p>
+            {{ form.user_face.label(class="sr-only")}}
+            {{ form.user_face(class="form-control") }}
+            {% if messages and messages[0].user_face %}
+                    <div class="alert alert-danger alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert"
+                                aria-hidden="true">
+                            &times;
+                        </button>
+                         <small class="error">{{ messages and messages[0].user_face[0] }}</small><br>
+                    </div>
+            {% endif %}
+                <br>
+                {{ form.intru.label(class="sr-only")}}
+                {{ form.intru(class="form-control",style="height: 200px",value=user_data.intru) }}
+                {% if messages and messages[0].intru %}
+                    <div class="alert alert-danger alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert"
+                                aria-hidden="true">
+                            &times;
+                        </button>
+                         <small class="error">{{ messages and messages[0].user_face[0] }}</small><br>
+                    </div>
+            {% endif %}
+            {% endwith %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}
+             <title>用户登陆</title>
+{% endblock %}
+{% block head %}
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+    <link href="{{ url_for('static',filename='css/login.css') }}" rel="stylesheet">
+    {{ bootstrap.load_css() }}
+    {{ moment.include_jquery() }}
+    {{ moment.include_moment() }}
+{% endblock %}
+
+{% block js %}
+    {{ bootstrap.load_js() }}
+{% endblock %}
+
+{% block body %}
+
+        <form class="form-signin text-center" id="LoginForm" method="POST">
+            <img class="mb-4" src="{{ url_for('static',filename='image/logo.jpg') }}" alt="" width="72" height="72">
+            <h1 class="h3 mb-3 font-weight-normal">请登录</h1>
+            <hr>
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-danger alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert"
+                                aria-hidden="true">
+                            &times;
+                        </button>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
+            {{ form.csrf_token }}
+            {{ form.username.label(class="sr-only") }}
+            {{ form.username(class="form-control") }}
+            {{ form.password.label(class="sr-only")}}
+            {{ form.password(class="form-control") }}
+            <div class="checkbox mb-3">
+                {{ form.remember_me }}{{ form.remember_me.label }}
+            </div>
+            {{ form.submit(class="btn btn-lg  btn btn-primary btn-block") }}
+            <a class="btn btn-lg btn-info btn-block " href="{{ url_for('up_rank.sign')}}">sign</a>
+        </form>
+{% endblock %}

@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <title> B站榜单 - B站部分行业榜单</title>
+    <style type="text/css">
+        li>a{
+           color:#819198;
+            padding-top: 3px;
+            padding-right:10px ;
+        }
+        li>a:hover{
+            color: #ff7a98;
+        }
+        li>a.active{
+            color: hotpink;
+        }
+        #update-time{
+            border:solid #F4F4F4 1px;
+        }
+        #update-time>p{
+            padding-top:5px;
+            color: #A8A8AA;
+        }
+        #update-time>ul>li{
+            border:solid #F4F4F4 1px;
+        }
+         #update-time>ul>li:hover,
+          #update-time>ul>li:focus{
+             color: hotpink;
+         }
+         #update-time>ul>li>a.active{
+             color: hotpink;
+         }
+        #list-hd{
+            border:solid #F4F4F4 1px;
+        }
+    </style>
+{% endblock %}
+
+
+
+{% block body %}
+ <nav class="col-md-12 navbar navbar-default navbar-top" role="navigation">
+				<div class="navbar-header">
+					 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="{{url_for('up_rank.up_rank')}}">IKkssS的数据平台</a>
+				</div>
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li class=''>
+							 <a href="{{url_for('up_rank.up_rank')}}">Bilibili</a>
+						</li>
+						<li>
+							 <a href="markdownNote">微博</a>
+						</li>
+						<li class="dropdown">
+							 <a href="#" class="dropdown-toggle" data-toggle="dropdown">抖音<strong class="caret"></strong></a>
+							<ul class="dropdown-menu">
+								<li>
+									 <a href='notepad'>查看已有事项</a>
+								</li>
+								<li>
+									 <a href='notepadAdd'>添加事项</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <form class="navbar-form navbar-left" role="search">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Search">
+                            </div>
+                            <button type="submit" class="btn btn-default">搜索</button>
+                        </form>
+                        {% if user_data %}
+                        <li>
+                            <img class="col-md-2 img-circle" style="width: 72px;height: 48px;padding-top:1px" src="{{ url_for('static',filename='image/logo.jpg') }}">
+                            <a href="{{ url_for('up_rank.personal')}}" class="col-md-2" style="color: #ff3361">{{user_data.username}}</a>
+                        </li>
+                        {% else %}
+                        <li><a href="admin"><span class="glyphicon glyphicon-user"></span> Admin</a></li>
+                        {% endif %}
+                    </ul>
+
+				</div>
+			</nav>
+            <ul class="col-md-12 col-xs-3 list-unstyled list-inline ">
+                    <li class="col-md-3 text-center border active ">
+                        <a class="col-md-12 col-xl-12 " href="{{url_for('up_rank.up_rank')}}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="col-md-12 bi bi-trophy" viewBox="0 0 16 16">
+                              <path d="M2.5.5A.5.5 0 0 1 3 0h10a.5.5 0 0 1 .5.5c0 .538-.012 1.05-.034 1.536a3 3 0 1 1-1.133 5.89c-.79 1.865-1.878 2.777-2.833 3.011v2.173l1.425.356c.194.048.377.135.537.255L13.3 15.1a.5.5 0 0 1-.3.9H3a.5.5 0 0 1-.3-.9l1.838-1.379c.16-.12.343-.207.537-.255L6.5 13.11v-2.173c-.955-.234-2.043-1.146-2.833-3.012a3 3 0 1 1-1.132-5.89A33.076 33.076 0 0 1 2.5.5zm.099 2.54a2 2 0 0 0 .72 3.935c-.333-1.05-.588-2.346-.72-3.935zm10.083 3.935a2 2 0 0 0 .72-3.935c-.133 1.59-.388 2.885-.72 3.935zM3.504 1c.007.517.026 1.006.056 1.469.13 2.028.457 3.546.87 4.667C5.294 9.48 6.484 10 7 10a.5.5 0 0 1 .5.5v2.61a1 1 0 0 1-.757.97l-1.426.356a.5.5 0 0 0-.179.085L4.5 15h7l-.638-.479a.501.501 0 0 0-.18-.085l-1.425-.356a1 1 0 0 1-.757-.97V10.5A.5.5 0 0 1 9 10c.516 0 1.706-.52 2.57-2.864.413-1.12.74-2.64.87-4.667.03-.463.049-.952.056-1.469H3.504z"/>
+                            </svg>
+                            <span>up主榜单</span>
+                        </a>
+                    </li>
+                    <li class="col-md-3 text-center border ">
+                        <a class="col-md-12 col-xl-12 active" href="{{url_for('up_rank.fans_rise')}}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="col-md-12 bi bi-graph-up" viewBox="0 0 16 16">
+                              <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0zm10 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V4.9l-3.613 4.417a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61L13.445 4H10.5a.5.5 0 0 1-.5-.5z"/>
+                            </svg>
+                            <span>张粉榜单</span>
+                        </a>
+                    </li>
+                    <li class="col-md-3 text-center border ">
+                        <a class="col-md-12 col-xl-12" href="{{url_for('up_rank.down_fans')}}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="col-md-12 bi bi-graph-down" viewBox="0 0 16 16">
+                              <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0zm10 11.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 0-1 0v2.6l-3.613-4.417a.5.5 0 0 0-.74-.037L7.06 8.233 3.404 3.206a.5.5 0 0 0-.808.588l4 5.5a.5.5 0 0 0 .758.06l2.609-2.61L13.445 11H10.5a.5.5 0 0 0-.5.5z"/>
+                            </svg>
+                            <span>掉粉榜单</span>
+                        </a>
+                    </li>
+                    <li class="col-md-3 text-center border ">
+                        <a class="col-md-12 col-xl-12" href="{{url_for('up_rank.video_rank')}}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="col-md-12 bi bi-file-earmark-play" viewBox="0 0 16 16">
+                              <path d="M6 6.883v4.234a.5.5 0 0 0 .757.429l3.528-2.117a.5.5 0 0 0 0-.858L6.757 6.454a.5.5 0 0 0-.757.43z"/>
+                              <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
+                            </svg>
+                            <span style="">视频播放量榜单</span>
+                        </a>
+                    </li>
+            </ul>
+            <div id="update-time" class="col-md-12 ">
+                <ul class="col-md-3 col-xs-3  list-unstyled list-inline text-center" style="margin-bottom: 10px;padding-top: 10px;padding-left: 25px">
+                    <li class="col-md-4"><a class="active" href="?rank_type=day">日榜</a></li>
+                    <li class="col-md-4"><a href="?rank_type=week" >周榜</a></li>
+                    <li class="col-md-4"><a href="?rank_type=mouth">月榜</a></li>
+                </ul>
+                <div class="col-md-5 text-left btn-group" style="padding-top: 5px">
+                  <button class="btn btn-default btn-sm dropdown-toggle"  type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                     {{data_dict['show_time'].strftime("%Y年%m月%d日")}} <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu">
+                    {%  for date in data_dict['time_list'] %}
+                      <li><a href="?rank_type=day&datecode={{date.strftime('%Y%m%d')}}">{{date.strftime("%Y年%m月%d日")}}</a></li>
+                      {% endfor %}
+                  </ul>
+                </div>
+                <p class="col-md-4 text-right" style="padding-right: 25px"> 更新时间：{{data_dict["date_time"]}}</p>
+            </div>
+            <div id="list-hd" class="col-md-12">
+                <div class="col-md-1 text-center" style="border-right: 1px #F4F4F4 solid;padding-top: 10px;padding-bottom: 10px">排行榜</div>
+                <div class="col-md-7 text-left" style="border-right: 1px #F4F4F4 solid;padding-top: 10px;padding-bottom: 10px">&nbsp;&nbsp;up主信息&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                <div class="col-md-1 text-center" style="border-right: 1px #F4F4F4 solid;padding-top: 10px;padding-bottom: 10px">粉丝总数</div>
+                <div class="col-md-1 text-center" style="border-right: 1px #F4F4F4 solid;padding-top: 10px;padding-bottom: 10px">粉丝增量</div>
+                <div class="col-md-1 text-center" style="border-right: 1px #F4F4F4 solid;padding-top: 10px;padding-bottom: 10px">涨粉率</div>
+                <div class="col-md-1 text-center" style="padding-top: 10px;padding-bottom: 10px">操作</div>
+            </div>
+            <div id="list-data" >
+                {% for data in data_dict["UpRiseFansRank"] %}
+                    <div class="col-md-12" id="col-item" style="border-right: 1px #F4F4F4 solid;border-left: 1px #F4F4F4 solid;border-bottom: 1px #F4F4F4 solid;padding-top: 10px;padding-bottom: 10px">
+                        <div class="col-md-1 text-center" style="border-right: 1px #F4F4F4 solid;padding-bottom: 20px;padding-top: 20px">{{data["rank"]}}</div>
+                        <div class="col-md-7" style="border-right: 1px #F4F4F4 solid;">
+                            <div class="text-left">
+                                <img class="col-md-9 img-circle" style="width: 72px;height: 48px" src='{{data["face_url"]}}'>
+                                <div class="col-md-10">
+                                    <p>{{data["up_name"]}}</p>
+                                    <p>{{data["up_lv"]}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1 text-center" style="border-right: 1px #F4F4F4 solid;padding-bottom: 20px;padding-top: 20px">{{data["up_fans"]}}</div>
+                        <div class="col-md-1 text-center" style="border-right: 1px #F4F4F4 solid;padding-bottom: 20px;padding-top: 20px">{{data["up_risefans"]}}</div>
+                        <div class="col-md-1 text-center" style="border-right: 1px #F4F4F4 solid;padding-bottom: 20px;padding-top: 20px">{{data["up_fans_growth_rate"]}}</div>
+                        <div style="padding-bottom: 20px;padding-top: 20px" class="col-md-1 text-center">
+                            {% if 'brand_compare_id' in data %}
+                                <a  href="/detail?view_type=1&uid={{data.brand_compare_id}}" style="color: hotpink">分析</a>
+                            {% else %}
+                                无
+                            {% endif %}
+                        </div>
+                    </div>
+
+                {% endfor %}
+
+            </div>
+{% endblock %}
