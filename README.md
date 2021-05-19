@@ -19,61 +19,63 @@
 
 ## 项目结构
 
-`│  config.py
-│  README.md
-│  requirements.txt
-│  run.py
-│  tree.txt
-│  user_agents.txt
-│  
-└─app
-    │  databse.py
-    │  extensions.py
-    │  forms.py
-    │  models.py
-    │  __init__.py
+` 
+
+    │  config.py
+    │  README.md
+    │  requirements.txt
+    │  run.py
+    │  tree.txt
+    │  user_agents.txt
     │  
-    ├─cli
-    │      cache.py
-    │      fgDetailSiper.py
-    │      fgSpider.py
-    │      setSession.py
-    │      user_agents.txt
-    │      __init__.py
-    │      
-    ├─services
-    │      up_rank.py
-    │      __init__.py
-    │      
-    ├─static
-    │  ├─css
-    │  │      login.css
-    │  │      
-    │  ├─image
-    │  │      jiamianqishi.png
-    │  │      logo.jpg
-    │  │      rz.jpg
-    │  │      
-    │  └─js
-    │          customed.js
-    │          search.js
-    │          
-    └─templates
-        │  base.html
-        │  login.html
-        │  personal.html
-        │  sign.html
+    └─app
+        │  databse.py
+        │  extensions.py
+        │  forms.py
+        │  models.py
+        │  __init__.py
         │  
-        └─up_rank
-                up_detail.html
-                up_down_fans_day.html
-                up_down_fans_mouth.html
-                up_down_fans_week.html
-                up_rank.html
-                up_rise_fans_day.html
-                up_rise_fans_mouth.html
-                up_rise_fans_week.html
-                video_rank.html
+        ├─cli
+        │      cache.py
+        │      fgDetailSiper.py
+        │      fgSpider.py
+        │      setSession.py
+        │      user_agents.txt
+        │      __init__.py
+        │      
+        ├─services
+        │      up_rank.py
+        │      __init__.py
+        │      
+        ├─static
+        │  ├─css
+        │  │      login.css
+        │  │      
+        │  ├─image
+        │  │      jiamianqishi.png
+        │  │      logo.jpg
+        │  │      rz.jpg
+        │  │      
+        │  └─js
+        │          customed.js
+        │          search.js
+        │          
+        └─templates
+            │  base.html
+            │  login.html
+            │  personal.html
+            │  sign.html
+            │  
+            └─up_rank
+                    up_detail.html
+                    up_down_fans_day.html
+                    up_down_fans_mouth.html
+                    up_down_fans_week.html
+                    up_rank.html
+                    up_rise_fans_day.html
+                    up_rise_fans_mouth.html
+                    up_rise_fans_week.html
+                    video_rank.html
                 
 `
 
